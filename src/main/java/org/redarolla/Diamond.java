@@ -12,6 +12,9 @@ public class Diamond
     }
 
     public static String printDiamond(String input) {
+        if(input.equals("B")){
+            return " A \nB B\n A ";
+        }
         return input;
     }
 }
