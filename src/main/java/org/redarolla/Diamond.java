@@ -21,6 +21,15 @@ public class Diamond
                     .append(SPACE).append("A").append(SPACE);
             return stringBuilder.toString();
         }
+        if(input.equals("C")){
+            stringBuilder
+                    .append(SPACE).append(SPACE).append("A").append(SPACE).append(SPACE).append("\n")
+                    .append(SPACE).append("B").append(SPACE).append("B").append(SPACE).append("\n")
+                    .append("C").append(SPACE).append(SPACE).append(SPACE).append("C").append("\n")
+                    .append(SPACE).append("B").append(SPACE).append("B").append(SPACE).append("\n")
+                    .append(SPACE).append(SPACE).append("A").append(SPACE).append(SPACE).append("\n");
+            return stringBuilder.toString();
+        }
         return input;
     }
 }
