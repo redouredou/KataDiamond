@@ -6,14 +6,20 @@ package org.redarolla;
  */
 public class Diamond
 {
+    private static final String SPACE = " ";
     public static void main( String[] args )
     {
         System.out.println( "Diamond Kata!" );
     }
 
     public static String printDiamond(String input) {
+        StringBuilder stringBuilder = new StringBuilder();
         if(input.equals("B")){
-            return " A \nB B\n A ";
+            stringBuilder
+                    .append(SPACE).append("A").append(SPACE).append("\n")
+                    .append("B").append(SPACE).append("B").append("\n")
+                    .append(SPACE).append("A").append(SPACE);
+            return stringBuilder.toString();
         }
         return input;
     }
