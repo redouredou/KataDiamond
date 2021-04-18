@@ -1,8 +1,11 @@
 package org.redarolla;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * Hello world!
@@ -14,79 +17,58 @@ public class Diamond
     public static void main( String[] args )
     {
         System.out.println(printDiamond("Z"));
+
     }
 
     public static String printDiamond(String input) {
-        StringBuilder stringBuilder = new StringBuilder();
-        String[] alpha = getAlphabet();
+        StringBuilder diamond = new StringBuilder();
+        String[] alpha = getAlphabet(input.charAt(0));
 
-        int length = Arrays.asList(alpha).indexOf(input)*2 + 1;
+        int length = Arrays.asList(alpha).indexOf(input) * 2 + 1;
 
-        int letterPosition = Arrays.asList(alpha).indexOf(input);
-        int incAndDecIndex;
-        for(int i = 0, k = length -1; i<length; i++, k--){
-            incAndDecIndex = i <= letterPosition ? i : k ;
-            for(var j = 0; j<length; j++){
-                if(j == letterPosition - incAndDecIndex || j == letterPosition + incAndDecIndex){
-                    stringBuilder.append(alpha[incAndDecIndex]);
+        int inputLetterPosition = Arrays.asList(alpha).indexOf(input);
+
+        IntStream.rangeClosed(0, length - 1).forEach(indexDiamondRow -> {
+            int indexSym = getSymmetricalArray(inputLetterPosition).get(indexDiamondRow);
+
+            IntStream.rangeClosed(0, length - 1).forEach(indexDiamondCol -> {
+
+                if(isLetterIterationPosition(indexDiamondCol, indexSym, inputLetterPosition)){
+                    diamond.append(alpha[indexSym]);
                 }else{
-                    stringBuilder.append(SPACE);
+                    diamond.append(SPACE);
                 }
-            }
-            stringBuilder.append("\n");
-        }
 
-        int index = stringBuilder.toString().length();
+            });
 
-        return stringBuilder.delete(index - 1, index).toString();
-    }
+            diamond.append("\n");
+        });
 
-    public static String diamondFirstLastLine(String letter){
-        String[] alpha = getAlphabet();
-        int length = Arrays.asList(alpha).indexOf(letter)*2 + 1;
+        int index = diamond.toString().length();
 
-
-        if(letter.equals("A")){
-            return "A";
-        }
-
-        StringBuilder stringBuilder = new StringBuilder();
-        for(var i = 0; i < length; i++){
-           if(i != Arrays.asList(alpha).indexOf(letter)){
-               stringBuilder.append(SPACE);
-           }else{
-               stringBuilder.append("A");
-           }
-        }
-        return stringBuilder.toString();
-    }
-
-    public static String diamondLineOfInputLetter(String letter){
-
-        if(letter.equals("A")){
-            return "A";
-        }
-        String[] alpha = getAlphabet();
-        int length = Arrays.asList(alpha).indexOf(letter)*2 + 1;
-        StringBuilder stringBuilder = new StringBuilder();
-
-        for(var i = 0; i < length; i++){
-            if(i == 0 || i == length - 1){
-                stringBuilder.append(letter);
-            }else{
-                stringBuilder.append(SPACE);
-            }
-        }
-        return stringBuilder.toString();
+        return diamond.delete(index - 1, index).toString();
     }
 
 
-
-    public static String[] getAlphabet(){
+    public static String[] getAlphabet(char input){
         return IntStream
-                .rangeClosed('A','Z')
+                .rangeClosed('A', input)
                 .mapToObj(c -> ""+ (char)c)
                 .collect(Collectors.joining())
                 .split("");
+    }
+
+    public static List<Integer> getSymmetricalArray(int number){
+        Stream<Integer> zeroToNumberInput = IntStream.rangeClosed(0, number - 1).boxed();
+        Stream<Integer> numberInputToZero = IntStream.rangeClosed(0, number - 1).boxed().sorted(Collections.reverseOrder());
+
+        return Stream.of(zeroToNumberInput, Stream.of(number), numberInputToZero)
+                .reduce(Stream::concat)
+                .orElseGet(Stream::empty)
+                .collect(Collectors.toList());
+    }
+
+    public static boolean isLetterIterationPosition(int indexDiamondCol, int indexSym, int inputLetterPosition){
+        return indexDiamondCol == inputLetterPosition - indexSym || indexDiamondCol == inputLetterPosition + indexSym;
     }
 }
